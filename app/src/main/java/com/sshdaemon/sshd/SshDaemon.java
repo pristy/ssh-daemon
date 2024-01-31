@@ -125,6 +125,8 @@ public class SshDaemon extends Service {
         var simpleGeneratorHostKeyProvider = new SimpleGeneratorHostKeyProvider(Paths.get(path + "/ssh_host_rsa_key"));
         sshd.setKeyPairProvider(simpleGeneratorHostKeyProvider);
         sshd.setShellFactory(new InteractiveProcessShellFactory());
+        // add new function to access shell command. yusung.joo
+        sshd.setCommandFactory(new ScpCommandFactory.Builder().withDelegate(new ProcessShellCommandFactory()).build());
         var factory = new SftpSubsystemFactory.Builder().build();
         if (readOnly) {
             factory.addSftpEventListener((SimpleAccessControlSftpEventListener.READ_ONLY_ACCESSOR));
